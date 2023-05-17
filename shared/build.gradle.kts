@@ -31,6 +31,7 @@ kotlin {
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+                implementation("io.insert-koin:koin-core:3.3.3")
             }
         }
         val commonTest by getting {
@@ -42,6 +43,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+                implementation("io.insert-koin:koin-androidx-compose:3.4.2")
             }
         }
         val androidUnitTest by getting

@@ -1,5 +1,6 @@
 package com.hedoleague.data.network
 
+import com.hedoleague.data.mock.MockTableData
 import com.hedoleague.data.network.response.TablesResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -19,7 +20,7 @@ class TablesApi {
     }
 
     suspend fun getTables(): TablesResponse {
-        // TODO: link 변경 필요
-        return httpClient.get("https://api.spacexdata.com/v5/launches").body()
+        return MockTableData.response
+//        return httpClient.get("https://api.spacexdata.com/v5/launches").body()
     }
 }
