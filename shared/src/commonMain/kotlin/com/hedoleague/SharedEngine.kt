@@ -1,4 +1,4 @@
 package com.hedoleague
 
-class SharedEngine {
+expect class SharedEngine {
 }
