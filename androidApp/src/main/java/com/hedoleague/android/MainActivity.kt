@@ -3,50 +3,76 @@ package com.hedoleague.android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.hedoleague.Greeting
-import kotlinx.coroutines.launch
+import androidx.compose.ui.unit.dp
+import com.hedoleague.domain.data.RankInfo
+import org.koin.android.ext.android.get
 
 class MainActivity : ComponentActivity() {
+    private val viewModel: TablesViewModel = get()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.getTables()
         setContent {
             MyApplicationTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val scope = rememberCoroutineScope()
-                    var text by remember { mutableStateOf("Loading") }
-                    LaunchedEffect(true) {
-                        scope.launch {
-                            text = try {
-                                Greeting().greeting()
-                            } catch (e: Exception) {
-                                e.localizedMessage ?: "error"
-                            }
-                        }
-                    }
-                    GreetingView(text)
+                    TablesComponent()
                 }
             }
         }
     }
-}
 
-@Composable
-fun GreetingView(text: String) {
-    Text(text = text)
-}
+    @Composable
+    fun TablesComponent() {
+        val tables = viewModel.tablesStateFlow.collectAsState().value
+        LazyColumn {
+            items(tables.count()) { idx ->
+                RankItem(tables[idx])
+            }
+        }
+    }
 
-@Preview
-@Composable
-fun DefaultPreview() {
-    MyApplicationTheme {
-        GreetingView("Hello, Android!")
+    @Composable
+    fun RankItem(rankInfo: RankInfo) {
+        Row {
+            Text(
+                text = rankInfo.position.toString(),
+                modifier = Modifier.padding(3.dp)
+            )
+            Text(
+                text = rankInfo.team.name,
+                modifier = Modifier.padding(3.dp)
+            )
+            Text(
+                text = rankInfo.playGames.toString(),
+                modifier = Modifier.padding(3.dp)
+            )
+            Text(
+                text = rankInfo.won.toString(),
+                modifier = Modifier.padding(3.dp)
+            )
+            Text(
+                text = rankInfo.draw.toString(),
+                modifier = Modifier.padding(3.dp)
+            )
+            Text(
+                text = rankInfo.lost.toString(),
+                modifier = Modifier.padding(3.dp)
+            )
+        }
     }
 }
+
